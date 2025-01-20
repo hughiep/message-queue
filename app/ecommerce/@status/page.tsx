@@ -1,20 +1,22 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Wss } from '@/lib/socket'
 
 const socket = Wss.getInstance()
 export default function Status() {
+  const [orders, setOrders] = useState<any[]>([])
+
   useEffect(() => {
     socket.connect()
   }, [])
 
   useEffect(() => {
     socket.on('order', (message: any) => {
-      console.log(message)
+      setOrders((prevOrders) => [...prevOrders, message])
     })
   }, [])
 
-  return <div>Status</div>
+  return <div>Status: {orders.length}</div>
 }
